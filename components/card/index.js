@@ -1,21 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import { BsDot } from "react-icons/bs";
 import {
   AiFillHome,
   AiFillStar,
   AiOutlineCreditCard,
   AiOutlineHeart,
+  AiFillHeart,
 } from "react-icons/ai";
 import { MdArrowForwardIos } from "react-icons/md";
 import { BiPackage } from "react-icons/bi";
 import { RxPerson } from "react-icons/rx";
 import { RiArrowGoBackLine } from "react-icons/ri";
 import { IoShareOutline } from "react-icons/io5";
-import { SiAdguard } from "react-icons/si";
 
 import styles from "@/styles/Card.module.css";
 
-export default function Card() {
+export default function Card(props) {
+  console.log(props);
+  const { description, itemName, instalment, tag, seller, price } = props;
+  const [isFavourite, setIsFavourite] = useState(false);
+
+  function numberWithCommas(num = 0) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
   return (
     <>
       <div className={styles.card}>
@@ -65,47 +73,52 @@ export default function Card() {
             Apple
             <MdArrowForwardIos size={10} />
           </span>
-          <h3>Galaxy Note 20 Ultra 5G 256GB Mystic Bronze (SM-N986BZKABTU)</h3>
-          <div className={styles.tag}>
-            <strong>SIFIR AYARINDA</strong>
-          </div>
-          <div className={styles.tag + " " + styles.dark}>
-            <SiAdguard size={20} />
-            <sup>
-              <small>GARANTİLİ</small>
-            </sup>
-          </div>
+          <h3>{itemName}</h3>
+          {tag &&
+            Array.isArray(tag) &&
+            tag.map((item, index) => {
+              return (
+                <div
+                  className={styles.tag}
+                  key={index}
+                  style={{
+                    backgroundColor: item?.tagBackgroundColor,
+                    color: item?.tagTextColor,
+                  }}
+                >
+                  {item?.tagName}
+                </div>
+              );
+            })}
         </div>
         <div className={styles.sellerNote}>
-          <span>
-            İlk günden beri kullanılmamıştır. Kutusu ve aksesuarları mevcuttur.
-          </span>
+          <span>{description}</span>
           <div className={styles.sellerScoreContainer}>
             <span>
               <RxPerson size={20} />
               Satıcı:
             </span>
             <span>
-              <strong>Mustafa D***</strong>
+              <strong>{seller?.name}</strong>
             </span>
             <span className={styles.sellerScoreTag}>
               <AiFillStar size={15} />
-              8.3
+              <strong>{seller?.rating}</strong>
             </span>
           </div>
         </div>
         <div className={styles.price}>
           <h1>
-            6.999,
+            {numberWithCommas(price)},
             <sub>
               <small>00</small>
             </sub>
           </h1>
           <div className={styles.oldPriceContainer}>
             <div className={styles.oldPrice}>
-              <strong>7.999,00 TL</strong>
+              <strong>6.780,00</strong>
             </div>
-            <div className={styles.discountRate}>12,5% bizden olsun</div>
+            <div className={styles.discountRate}>%5 bizden olsun</div>
           </div>
         </div>
 
@@ -121,7 +134,7 @@ export default function Card() {
                 textDecoration: "underline",
               }}
             >
-              800 * 6 aya kadar taksit
+              {instalment}
             </span>
           </div>
           <div className={styles.feature}>
@@ -141,7 +154,20 @@ export default function Card() {
             <IoShareOutline size={25} />
           </div>
           <div className={styles.iconButton}>
-            <AiOutlineHeart size={25} />
+            {isFavourite ? (
+              <AiFillHeart
+                size={25}
+                style={{
+                  color: "#f00",
+                }}
+                onClick={() => setIsFavourite(!isFavourite)}
+              />
+            ) : (
+              <AiOutlineHeart
+                size={25}
+                onClick={() => setIsFavourite(!isFavourite)}
+              />
+            )}
           </div>
           <div className={styles.button}>Hemen Al</div>
         </div>

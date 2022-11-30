@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.navigations {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 20px 0;
+}
+
+.navigations button {
+  margin: 0 10px;
+  background-color: antiquewhite;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
