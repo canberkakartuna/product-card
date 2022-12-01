@@ -7,7 +7,7 @@ import {
   AiOutlineHeart,
   AiFillHeart,
 } from "react-icons/ai";
-import { MdArrowForwardIos } from "react-icons/md";
+import { MdArrowForwardIos, MdArrowBackIos } from "react-icons/md";
 import { BiPackage } from "react-icons/bi";
 import { RxPerson } from "react-icons/rx";
 import { RiArrowGoBackLine } from "react-icons/ri";
@@ -15,39 +15,74 @@ import { IoShareOutline } from "react-icons/io5";
 
 import styles from "@/styles/Card.module.css";
 
-export default function Card(props) {
-  console.log(props);
-  const { description, itemName, instalment, tag, seller, price } = props;
+export default function Card(props = {}) {
+  const { description, itemName, instalment, tag, seller, price, sliderImage } =
+    props;
   const [isFavourite, setIsFavourite] = useState(false);
+  const [slideImageIndex, setSlideImageIndex] = useState(0);
 
-  function numberWithCommas(num = 0) {
+  const numberWithCommas = (num = 0) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  }
+  };
+
+  const handleSlide = (index) => {
+    if (index === 1) {
+      if (slideImageIndex < sliderImage.length - 1) {
+        setSlideImageIndex(slideImageIndex + 1);
+      } else {
+        setSlideImageIndex(0);
+      }
+    }
+    if (index === -1) {
+      if (slideImageIndex > 0) {
+        setSlideImageIndex(slideImageIndex - 1);
+      } else {
+        setSlideImageIndex(sliderImage.length - 1);
+      }
+    }
+  };
 
   return (
     <>
       <div className={styles.card}>
-        <div className={styles.imageContainer}>
+        <div
+          className={styles.imageContainer}
+          style={{
+            background: 'url("' + sliderImage[slideImageIndex].imageUrl + '")',
+          }}
+        >
+          <div className={styles.arrowContainer}>
+            <div className={styles.back} onClick={() => handleSlide(-1)}>
+              <MdArrowBackIos
+                size={25}
+                style={{
+                  color: "#fff",
+                }}
+              />
+            </div>
+            <div className={styles.forward} onClick={() => handleSlide(1)}>
+              <MdArrowForwardIos
+                size={25}
+                style={{
+                  color: "#fff",
+                }}
+              />
+            </div>
+          </div>
           <div className={styles.productImage}>
             <div className={styles.imageDots}>
-              <BsDot
-                size={20}
-                style={{
-                  color: "#fff",
-                }}
-              />
-              <BsDot
-                size={20}
-                style={{
-                  color: "#fff",
-                }}
-              />
-              <BsDot
-                size={20}
-                style={{
-                  color: "#fff",
-                }}
-              />
+              {sliderImage.map((_, index) => {
+                return (
+                  <BsDot
+                    key={index}
+                    size={25}
+                    style={{
+                      color: "#fff",
+                      opacity: index === slideImageIndex ? 1 : 0.5,
+                    }}
+                  />
+                );
+              })}
             </div>
           </div>
         </div>
