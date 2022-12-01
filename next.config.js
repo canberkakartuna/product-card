@@ -2,7 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["https://picsum.photos"],
+    loader: "akamai",
+    path: "",
   },
 };
 
